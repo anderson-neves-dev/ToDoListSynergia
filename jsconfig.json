@@ -1,0 +1,64 @@
+{
+  "compilerOptions": {
+    "checkJs": true,
+    "allowJs": true,
+    "jsx": "react",
+    "baseUrl": ".",
+    "paths": {
+      "/*": [
+        "./*"
+      ],
+      "meteor/mongo": [
+        "/home/two/.meteor/packages/mongo/2.1.0/web.browser/local_collection_driver.js",
+        "/home/two/.meteor/packages/mongo/2.1.0/web.browser/collection/collection.js",
+        "/home/two/.meteor/packages/mongo/2.1.0/web.browser/asynchronous_cursor.js",
+        "/home/two/.meteor/packages/mongo/2.1.0/web.browser/doc_fetcher.js",
+        "/home/two/.meteor/packages/mongo/2.1.0/web.browser/mongo_common.js",
+        "/home/two/.meteor/packages/mongo/2.1.0/web.browser/mongo_connection.js",
+        "/home/two/.meteor/packages/mongo/2.1.0/web.browser/mongo_driver.js",
+        "/home/two/.meteor/packages/mongo/2.1.0/web.browser/mongo_utils.js",
+        "/home/two/.meteor/packages/mongo/2.1.0/web.browser/oplog_observe_driver.js",
+        "/home/two/.meteor/packages/mongo/2.1.0/web.browser/collection/collection_utils.js",
+        "/home/two/.meteor/packages/mongo/2.1.0/web.browser/collection/methods_async.js",
+        "/home/two/.meteor/packages/mongo/2.1.0/web.browser/collection/methods_index.js",
+        "/home/two/.meteor/packages/mongo/2.1.0/web.browser/collection/methods_replication.js",
+        "/home/two/.meteor/packages/mongo/2.1.0/web.browser/collection/methods_sync.js"
+      ],
+      "meteor/reactive-var": [
+        "/home/two/.meteor/packages/reactive-var/1.0.13/web.browser/reactive-var.js"
+      ],
+      "meteor/es5-shim": [
+        "/home/two/.meteor/packages/es5-shim/4.8.1/web.browser/client.js",
+        "/home/two/.meteor/packages/es5-shim/4.8.1/web.browser/console.js",
+        "/home/two/.meteor/packages/es5-shim/4.8.1/web.browser/cordova.js",
+        "/home/two/.meteor/packages/es5-shim/4.8.1/web.browser/export_globals.js",
+        "/home/two/.meteor/packages/es5-shim/4.8.1/web.browser/import_globals.js"
+      ],
+      "meteor/ecmascript": [
+        "/home/two/.meteor/packages/ecmascript/0.16.10/web.browser/ecmascript.js"
+      ],
+      "meteor/shell-server": [
+        "/home/two/.meteor/packages/shell-server/0.6.1/web.browser/main.js",
+        "/home/two/.meteor/packages/shell-server/0.6.1/web.browser/shell-server.js"
+      ],
+      "meteor/hot-module-replacement": [
+        "/home/two/.meteor/packages/hot-module-replacement/0.5.4/web.browser/hot-api.js",
+        "/home/two/.meteor/packages/hot-module-replacement/0.5.4/web.browser/client.js",
+        "/home/two/.meteor/packages/hot-module-replacement/0.5.4/web.browser/server.js"
+      ],
+      "meteor/react-meteor-data": [
+        "/home/two/.meteor/packages/react-meteor-data/3.0.3/web.browser/index.js",
+        "/home/two/.meteor/packages/react-meteor-data/3.0.3/web.browser/suspense/index.js"
+      ]
+    }
+  },
+  "typeAcquisition": {
+    "include": [
+      "meteor"
+    ]
+  },
+  "exclude": [
+    "node_modules",
+    ".meteor"
+  ]
+}
