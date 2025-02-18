@@ -10,7 +10,7 @@ Este projeto é uma aplicação de **ToDo List** desenvolvida com o objetivo de 
 ## Como executar o projeto 🛠️
 
 1. Instale as dependências utilizando `npm install`.
-2. Execute o projeto com `npm start`.
+2. Execute o projeto com `meteor start`.
 
 A aplicação estará acessível no navegador no endereço `http://localhost:3000/`.
 
