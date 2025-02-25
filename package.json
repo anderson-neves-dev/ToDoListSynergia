@@ -9,11 +9,20 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.20.7",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@fontsource/roboto": "^5.1.1",
+    "@mui/icons-material": "^6.4.5",
+    "@mui/material": "^6.4.5",
+    "@mui/styled-engine-sc": "^6.4.3",
     "@types/meteor": "^2.9.8",
+    "bcrypt": "^5.1.1",
     "meteor-node-stubs": "^1.2.5",
     "react-dom": "^18.2.0",
     "react-router": "^6.4.0",
-    "react-router-dom": "^6.4.0"
+    "react-router-dom": "^6.4.0",
+    "simpl-schema": "^3.4.6",
+    "styled-components": "^6.1.15"
   },
   "devDependencies": {
     "@types/mocha": "^8.2.3",
