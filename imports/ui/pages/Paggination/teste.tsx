@@ -11,15 +11,13 @@ function TodoList() {
   const [page, setPage] = useState(0); // índice da página (0 para a primeira página)
   const skip = page * pageSize;
   const [count, setTotalCount] = useState(0);
-  setTotalCount(getTasksCountAsync());
   console.log({ count });
   const { tasks, totalCount, loading } = useTracker(() => {
     const subsPaginated = Meteor.subscribe("tasks.paginated", pageSize, skip);
 
     // Aplica skip e limit na consulta para exibir somente os itens da página atual
-    const tasks = TasksCollection.find().fetch();
+    const { tasks, totalCount } = TasksCollection.find();
 
-    const totalCount = count;
     return {
       tasks,
       totalCount,

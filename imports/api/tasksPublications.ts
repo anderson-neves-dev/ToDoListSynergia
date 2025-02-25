@@ -14,6 +14,7 @@ Meteor.publish("tasks", function () {
   }
   return TasksCollection.find({ byUserId });
 });
+
 Meteor.methods({
   async "tasks.agregation"(limit, skip) {
     new SimpleSchema({
@@ -75,8 +76,9 @@ Meteor.publish("tasks.paginated", function (limit, skip) {
     limit: limit,
     skip: skip,
   };
-
-  return TasksCollection.find({}, options);
+  const task = TasksCollection.find({}, options).fetch();
+  const totalCount = TasksCollection.find({}, options).fetch().length;
+  return { task, totalCount };
 });
 
 Meteor.publish("tasks.count", function (page = 1, pageSize = 10) {
