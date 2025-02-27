@@ -4,12 +4,17 @@ import styled from "styled-components";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
+const StyleSpanError = styled.span`
+  padding: 1px;
+  color: red;
+  font-weight: 300;
+`;
 const StyledDiv = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
   width: 100%;
-  position: relative; /* Adicionado para posicionar o ícone corretamente */
+  position: relative;
 `;
 
 const StyledInputWrapper = styled.div`
@@ -28,13 +33,13 @@ const TogglePasswordButton = styled.button`
   outline: none;
   cursor: pointer;
 `;
-
 interface InputWithLabelProps {
   label: string;
   placeholder?: string;
   type?: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   required: boolean;
+  errorMessage?: string;
 }
 
 export function InputWithLabel({
@@ -43,6 +48,7 @@ export function InputWithLabel({
   type,
   onChange,
   required,
+  errorMessage,
 }: InputWithLabelProps) {
   const [isPasswordVisible, setPasswordVisible] = useState(false);
   const handleTogglePassword = () => {
@@ -76,10 +82,13 @@ export function InputWithLabel({
             borderRadius: "12px",
             cursor: "pointer",
             fontSize: "20px",
-            border: "0px",
+            border: errorMessage ? "2px solid red" : "0px", // 🔴 Adiciona borda vermelha quando há erro
             width: "100%",
             color: "#35353E",
-            "&:hover": { backgroundColor: "#FFFF", border: "0px" },
+            "&:hover": {
+              backgroundColor: "#FFFF",
+              border: errorMessage ? "2px solid red" : "0px",
+            },
           }}
         />
         {type === "password" && (
@@ -92,6 +101,7 @@ export function InputWithLabel({
           </TogglePasswordButton>
         )}
       </StyledInputWrapper>
+      {errorMessage && <StyleSpanError>{errorMessage}</StyleSpanError>}
     </StyledDiv>
   );
 }
