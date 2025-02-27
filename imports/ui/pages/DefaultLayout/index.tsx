@@ -19,8 +19,16 @@ import ListItemText from "@mui/material/ListItemText";
 import TaskIcon from "@mui/icons-material/Task";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import HouseSidingIcon from "@mui/icons-material/HouseSiding";
-import { Outlet } from "react-router";
+import { Outlet, useNavigate } from "react-router";
 import { LogoSynergia } from "/client/assets/iconesSynergia/logoSynergia";
+import { LogoSynergiaPrincipal } from "/client/assets/iconesSynergia/logoSynergiaPrincipal";
+import { Button } from "@mui/material";
+import LogoutIcon from "@mui/icons-material/Logout";
+
+const navigation = [
+  { text: "Home", href: "/", icon: HouseSidingIcon },
+  { text: "Tasks", href: "/tasks", icon: AssignmentIcon },
+];
 
 const drawerWidth = 240;
 
@@ -110,6 +118,7 @@ export default function MiniDrawer() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
+  const nav = useNavigate();
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -156,11 +165,16 @@ export default function MiniDrawer() {
           >
             ToDo List 🚀
           </Typography>
+          ola
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
-        <DrawerHeader>
-          <LogoSynergia />
+        <DrawerHeader
+          sx={{
+            height: "50px",
+          }}
+        >
+          <LogoSynergiaPrincipal />
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === "rtl" ? (
               <ChevronRightIcon />
@@ -170,60 +184,88 @@ export default function MiniDrawer() {
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <List>
-          {["Home", "Tasks", "Send email", "Drafts"].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: "block" }}>
-              <ListItemButton
-                sx={[
-                  {
-                    minHeight: 48,
-                    px: 2.5,
-                  },
-                  open
-                    ? {
-                        justifyContent: "initial",
-                      }
-                    : {
-                        justifyContent: "center",
-                      },
-                ]}
+
+        {/* Envolve tudo em um Box flexível */}
+        <Box sx={{ display: "flex", flexDirection: "column", height: "100%" }}>
+          <List sx={{ flexGrow: 1 }}>
+            {navigation.map((item) => (
+              <ListItem
+                key={item.text}
+                disablePadding
+                sx={{ display: "block" }}
               >
-                <ListItemIcon
+                <ListItemButton
+                  onClick={() => nav(item.href)}
                   sx={[
                     {
-                      minWidth: 0,
-                      justifyContent: "center",
+                      minHeight: 48,
+                      px: 2.5,
                     },
                     open
                       ? {
-                          mr: 3,
+                          justifyContent: "initial",
                         }
                       : {
-                          mr: "auto",
+                          justifyContent: "center",
                         },
                   ]}
                 >
-                  {index % 2 === 0 ? <HouseSidingIcon /> : <AssignmentIcon />}
-                </ListItemIcon>
+                  <ListItemIcon
+                    sx={[
+                      {
+                        minWidth: 0,
+                        justifyContent: "center",
+                      },
+                      open
+                        ? {
+                            mr: 3,
+                          }
+                        : {
+                            mr: "auto",
+                          },
+                    ]}
+                  >
+                    <item.icon />
+                  </ListItemIcon>
 
-                <ListItemText
-                  primary={text}
-                  sx={[
-                    open
-                      ? {
-                          opacity: 1,
-                        }
-                      : {
-                          opacity: 0,
-                        },
-                  ]}
-                />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
+                  <ListItemText
+                    primary={item.text}
+                    sx={[
+                      open
+                        ? {
+                            opacity: 1,
+                          }
+                        : {
+                            opacity: 0,
+                          },
+                    ]}
+                  />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          </List>
+
+          <Divider />
+
+          {/* Botão de logout fixado na parte inferior */}
+          <Box sx={{ paddingY: 2 }}>
+            <Button
+              onClick={() => Meteor.logout()}
+              fullWidth
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 1,
+              }}
+            >
+              <LogoutIcon />
+              {open && "Logout"}
+            </Button>
+          </Box>
+        </Box>
       </Drawer>
+
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
         <Outlet />
