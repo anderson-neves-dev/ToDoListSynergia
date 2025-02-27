@@ -5,10 +5,11 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { Checkbox, Divider, FormControlLabel } from "@mui/material";
 import styled from "styled-components";
-import { useTracker } from "meteor/react-meteor-data";
+import { useSubscribe, useTracker } from "meteor/react-meteor-data";
 import { Meteor } from "meteor/meteor";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import ModalConfirmacao from "/client/components/ModalConfirmacao";
+import { TasksCollection } from "/imports/api/tasksColletion";
 
 const style = {
   fontFamily: "Saira, sans-serif",
@@ -31,24 +32,47 @@ const StyledDiv = styled.div`
   position: relative;
 `;
 
-export default function CadastrarTask() {
+export default function EditarTask() {
   const user = useTracker(() => Meteor.user());
-
-  const [agendadaPara, setAgendadaPara] = React.useState({
-    date: "",
-    time: "",
-  });
-  const [task, setTask] = React.useState({
-    nome: "",
-    descricao: "",
-    criadaEm: new Date().toISOString(),
-    agendadaPara: new Date().toISOString(),
-    situacao: "Cadastrada",
-    privada: false,
-    byUserId: user?._id,
-    usuarioNome: user?.username,
-  });
+  const { id } = useParams();
   const nav = useNavigate();
+
+  const isLoading = useSubscribe("tasks");
+
+  const taskEdit = useTracker(() => {
+    if (!isLoading) return null;
+    return TasksCollection.findOne({ _id: id });
+  }, [id]);
+
+  console.log("Task encontrada:", taskEdit);
+
+  const [agendadaPara, setAgendadaPara] = React.useState(() => {
+    const dateTime = new Date(taskEdit.agendadaPara);
+
+    const hours = dateTime.getUTCHours().toString().padStart(2, "0");
+    const minutes = dateTime.getUTCMinutes().toString().padStart(2, "0");
+    const time = `${hours}:${minutes}`;
+
+    const date = dateTime.toISOString().split("T")[0];
+
+    return { time, date };
+  });
+
+  console.log({ agendadaPara });
+  console.log({ taskEdit });
+  const [task, setTask] = React.useState({
+    ...taskEdit,
+    criadaEm:
+      taskEdit.criadaEm instanceof Date
+        ? taskEdit.criadaEm.toISOString()
+        : new Date(taskEdit.criadaEm).toISOString(),
+
+    agendadaPara:
+      taskEdit.agendadaPara instanceof Date
+        ? taskEdit.agendadaPara.toISOString()
+        : new Date(taskEdit.agendadaPara).toISOString(),
+  });
+  console.log(task);
   const [open, setOpen] = React.useState(false);
 
   const handleCloseModal = () => setOpen(false);
@@ -61,10 +85,9 @@ export default function CadastrarTask() {
       [name]: type === "checkbox" ? checked : value,
     }));
   };
-  const handleSave = async () => {
+  const handleEdit = async () => {
     console.log(agendadaPara.date, agendadaPara.time);
 
-    // Converte corretamente para ISOString
     const agendadaParaISO =
       agendadaPara.date && agendadaPara.time
         ? new Date(
@@ -72,19 +95,15 @@ export default function CadastrarTask() {
           ).toISOString()
         : "";
 
-    // Criar a nova tarefa localmente
-    const novaTask = {
+    const taskEditada = {
       ...task,
       agendadaPara: agendadaParaISO,
     };
 
-    // Atualiza o estado (sem necessidade de await)
-    setTask(novaTask);
+    setTask(taskEditada);
 
-    // Chama o Meteor com a nova task
-    await Meteor.callAsync("tasks.insert", novaTask)
+    await Meteor.callAsync("tasks.update", taskEdit._id, task)
       .then(() => {
-        console.log("Tarefa salva:", novaTask);
         nav("/tasks");
       })
       .catch((error) => console.error("Erro ao salvar tarefa:", error));
@@ -94,12 +113,12 @@ export default function CadastrarTask() {
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        handleSave();
+        handleEdit();
       }}
     >
       <Box sx={style}>
         <Typography variant="h4" fontWeight="bold" gutterBottom>
-          Criar Nova Tarefa
+          Editar Task
         </Typography>
         <TextField
           required
