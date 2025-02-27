@@ -1,5 +1,7 @@
 import { Meteor } from "meteor/meteor";
 import { TasksCollection } from "./tasksColletion";
+import SimpleSchema from "simpl-schema";
+import { TaskInterface } from "/client/interfaces/task";
 
 Meteor.methods({
   "tasks.insert"(doc) {
@@ -22,9 +24,25 @@ Meteor.methods({
   "tasks.find"() {
     return TasksCollection.find();
   },
+  "tasks.paginated": async function (limit, skip) {
+    new SimpleSchema({
+      limit: { type: Number },
+      skip: { type: Number },
+    }).validate({ limit, skip });
 
-  "tasks.getTotalCount"() {
-    // Se precisar filtrar (ex: { byUserId: this.userId }), ajuste o selector
-    return TasksCollection.find().fetch().length;
+    const filtro = {
+      $or: [{ privada: true }, { byUserId: this.userId }],
+    };
+    const tasks = await TasksCollection.find(filtro, {
+      sort: { agendadaPara: -1 },
+      limit,
+      skip,
+    }).fetchAsync();
+
+    const numero = await TasksCollection.find(filtro).countAsync();
+    return { tasks, numero };
+  },
+  "tasks.update"(taskId: string, task: any) {
+    return TasksCollection.updateAsync(taskId, { $set: task });
   },
 });
