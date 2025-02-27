@@ -31,16 +31,21 @@ const style = {
 interface Props {
   open: boolean;
   onClose: () => void;
+  onClickSim?: () => void;
+  titulo: string;
 }
 
-export default function ModalConfirmacao({ open, onClose }: Props) {
-  const nav = useNavigate();
-
+export default function ModalConfirmacao({
+  open,
+  onClose,
+  onClickSim,
+  titulo,
+}: Props) {
   return (
     <Modal open={open} onClose={onClose} aria-labelledby="modal-title">
       <Box sx={style}>
         <Typography variant="h4" fontWeight="bold" gutterBottom>
-          Tem certeza que deseja cancelar o cadastro?
+          {titulo}
         </Typography>
 
         <StyledDiv>
@@ -48,7 +53,7 @@ export default function ModalConfirmacao({ open, onClose }: Props) {
             variant="contained"
             color="primary"
             fullWidth
-            onClick={() => nav("/tasks")}
+            onClick={onClickSim}
           >
             Sim
           </Button>
