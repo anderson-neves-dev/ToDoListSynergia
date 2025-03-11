@@ -2,13 +2,9 @@ import * as React from "react";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
-import Avatar from "@mui/material/Avatar";
-import ImageIcon from "@mui/icons-material/Image";
 import { TaskInterface } from "/client/interfaces/task";
-import { formatHoraMinuto } from "/client/shareds";
 import BasicModal from "../ModalVisualizar";
-import { Box, Button, Pagination, Stack } from "@mui/material";
+import { Box, Button, ButtonGroup, Pagination, Stack } from "@mui/material";
 import { useNavigate } from "react-router";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
@@ -17,8 +13,10 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import {
   TasksPaginationProvider,
   useTasksPagination,
-} from "/imports/ui/pages/Paggination/TasksPaginationContext";
+} from "../../context/Paggination/TasksPaginationContext";
 import ModalConfirmacao from "../ModalConfirmacao";
+import SearchInput from "../Seach";
+import { MachineEffectText } from "../MachineEffectText";
 
 const StyledDiv = styled.div`
   display: flex;
@@ -27,6 +25,17 @@ const StyledDiv = styled.div`
   align-items: center;
   gap: 15px;
 `;
+const StyledDivHeaderList = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: top;
+  justify-items: top;
+  width: 100%;
+  height: 56px;
+  gap: 20px;
+`;
+
 const StyledDivList = styled.div`
   width: 100%;
   display: flex;
@@ -34,11 +43,24 @@ const StyledDivList = styled.div`
   justify-content: center;
   align-items: center;
 `;
-interface FolderListProps {
-  tasks: TaskInterface[];
-}
 
 function App() {
+  // Importando dados do contexto
+  const {
+    tasks,
+    page,
+    pageSize,
+    totalCount,
+    loading,
+    setPage,
+    deletarTask,
+    user,
+    handleToggleSituacao,
+    situacao,
+    search,
+    setSearch,
+  } = useTasksPagination();
+
   const [open, setOpen] = React.useState(false);
   const [selectedTask, setSelectedTask] = React.useState<TaskInterface | null>(
     null
@@ -55,16 +77,6 @@ function App() {
     setModalDelete({ open: true, id });
   };
 
-  const {
-    tasks,
-    page,
-    pageSize,
-    totalCount,
-    loading,
-    setPage,
-    deletarTask,
-    user,
-  } = useTasksPagination();
   const handleOpenModal = (task: TaskInterface) => {
     setSelectedTask(task);
     setOpen(true);
@@ -86,9 +98,24 @@ function App() {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
+        gap: "30px",
         width: "100%",
+        fontFamily: "Saira, sans-serif",
       }}
     >
+      <Box
+        sx={{
+          width: "80%",
+          bgcolor: "background.paper",
+          display: "flex",
+          borderRadius: 2,
+          boxShadow: 3,
+          padding: "30px 20px",
+          height: "100px",
+        }}
+      >
+        <MachineEffectText text={`Tasks`} speed={100} />
+      </Box>
       <List
         sx={{
           width: "80%",
@@ -99,35 +126,74 @@ function App() {
           justifyContent: "space-between",
           borderRadius: 2,
           boxShadow: 5,
-          padding: "20px 20px",
-          marginTop: "50px",
-          height: "65vh",
+          padding: "30px 20px",
+          height: "75vh",
         }}
       >
         <StyledDivList>
-          <Button
-            onClick={() => {
-              nav("/cadastrar-task");
-            }}
-            variant="contained"
-            color="primary"
+          <StyledDivHeaderList>
+            <SearchInput search={search} setSearch={setSearch} />
+            <Button
+              onClick={() => {
+                nav("/cadastrar-task");
+              }}
+              variant="contained"
+              color="primary"
+              sx={{
+                fontWeight: "600",
+                textTransform: "none",
+                marginBottom: "20px",
+                fontSize: "16px",
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+                borderRadius: "20px",
+                width: "100%",
+                padding: "20px 16px",
+              }}
+            >
+              <AddCircleOutlineIcon sx={{ marginRight: "10px" }} />
+              <span>Adicionar Tarefa</span>
+            </Button>
+          </StyledDivHeaderList>
+          <ButtonGroup
             sx={{
-              fontWeight: "600",
-              textTransform: "none",
-              marginBottom: "20px",
-              fontSize: "16px",
+              width: "100%",
               display: "flex",
               flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "center",
-              borderRadius: "20px",
-              width: "80%",
+              justifyContent: "space-between",
+              border: "0px",
+              background: "transparent",
+              boxShadow: "0px",
+              gap: "10px",
             }}
+            variant="outlined"
+            aria-label="Basic button group"
           >
-            <AddCircleOutlineIcon sx={{ marginRight: "10px" }} />
-            <span>Adicionar Tarefa</span>
-          </Button>
-
+            {["Cadastrada", "Em Andamento", "Finalizada"].map((status) => (
+              <Button
+                key={status}
+                sx={{
+                  width: "100%",
+                  backgroundColor: situacao.includes(status)
+                    ? "#2E2EFF"
+                    : "#B3B3FF",
+                  color: "white",
+                  fontFamily: "Saira, sans-serif",
+                  fontWeight: "700",
+                  borderRadius: "20px",
+                  "&:hover": {
+                    backgroundColor: "#6768F2",
+                    cursor: "pointer",
+                  },
+                }}
+                onClick={() => handleToggleSituacao(status)}
+              >
+                {status}
+              </Button>
+            ))}
+          </ButtonGroup>
           {tasks &&
             tasks.map((task: TaskInterface) => (
               <ListItem
@@ -146,11 +212,6 @@ function App() {
                 }}
                 component="li"
               >
-                <ListItemAvatar>
-                  <Avatar sx={{ bgcolor: "#1976d2" }}>
-                    <ImageIcon />
-                  </Avatar>
-                </ListItemAvatar>
                 <ListItemText
                   sx={{
                     display: "flex",
@@ -168,16 +229,6 @@ function App() {
                         justifyItems: "center",
                       }}
                     >
-                      {/* <span
-                        style={{
-                          fontSize: "16px",
-                          color: "#555",
-                          marginRight: "10px",
-                        }}
-                      >
-                        {formatHoraMinuto(new Date(task.agendadaPara))}
-                        {" -  "}
-                      </span> */}
                       <span style={{ fontSize: "18px", fontWeight: "bold" }}>
                         {task.nome}
                       </span>
@@ -215,14 +266,14 @@ function App() {
 
         <Stack spacing={2} sx={{ marginTop: 2 }}>
           <Pagination
-            count={Math.max(1, Math.ceil(totalCount / pageSize))} // Total pages
+            count={Math.max(1, Math.ceil(totalCount / pageSize))}
             page={page}
             onChange={handlePageChange}
             color="primary"
           />
         </Stack>
       </List>
-
+      {/*Modais */}
       {selectedTask && (
         <BasicModal
           tasks={selectedTask}
@@ -236,7 +287,6 @@ function App() {
           onClose={handleCloseModalDelete}
           titulo="Tem certeza que deseja excluir o cadastro?"
           onClickSim={() => {
-            console.log("chegou aq", modalDelete.id);
             deletarTask(modalDelete.id);
             handleCloseModalDelete();
           }}
