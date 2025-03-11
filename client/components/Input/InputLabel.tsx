@@ -40,6 +40,8 @@ interface InputWithLabelProps {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   required: boolean;
   errorMessage?: string;
+  value?: string;
+  name?: string;
 }
 
 export function InputWithLabel({
@@ -49,6 +51,8 @@ export function InputWithLabel({
   onChange,
   required,
   errorMessage,
+  value,
+  name,
 }: InputWithLabelProps) {
   const [isPasswordVisible, setPasswordVisible] = useState(false);
   const handleTogglePassword = () => {
@@ -75,14 +79,16 @@ export function InputWithLabel({
           onChange={onChange}
           type={inputType}
           placeholder={placeholder}
+          value={value}
           disableUnderline
+          name={name}
           sx={{
             backgroundColor: "white",
             padding: "10px 15px",
             borderRadius: "12px",
             cursor: "pointer",
             fontSize: "20px",
-            border: errorMessage ? "2px solid red" : "0px", // 🔴 Adiciona borda vermelha quando há erro
+            border: errorMessage ? "2px solid red" : "0px", // Muda a cor se tiver erro
             width: "100%",
             color: "#35353E",
             "&:hover": {
