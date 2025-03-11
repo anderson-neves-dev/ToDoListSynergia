@@ -80,7 +80,6 @@ export default function Usuario() {
       ? new Date(`${userEdit.aniversario}T00:00:00.000Z`).toISOString()
       : "";
 
-    console.log("aa", { userEdit });
     try {
       await Meteor.callAsync("user.updateProfile", {
         ...userEdit,

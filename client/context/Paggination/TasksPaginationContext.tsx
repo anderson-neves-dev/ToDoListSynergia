@@ -90,9 +90,7 @@ export const TasksPaginationProvider: React.FC<{ children: ReactNode }> = ({
       if (error) {
         console.error("Erro ao buscar insights:", error);
       } else {
-        console.log({ result });
         setTasksInsights(result as TasksInsights);
-        console.log({ tasksInsights });
       }
       setLoading(false);
     });
@@ -103,12 +101,10 @@ export const TasksPaginationProvider: React.FC<{ children: ReactNode }> = ({
 
   // Função para deletar tarefas
   const deletarTask = (id: string) => {
-    console.log("chegou aqui", id);
     Meteor.call("tasks.delete", { _id: id }, (deleteError, result) => {
       if (deleteError) {
         return deleteError;
       } else {
-        console.log("Excluido", result);
         fetchTasks(page);
 
         return result;

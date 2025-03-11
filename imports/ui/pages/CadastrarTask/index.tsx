@@ -81,7 +81,6 @@ export default function CadastrarTask() {
 
     await Meteor.callAsync("tasks.insert", novaTask)
       .then(() => {
-        console.log("Tarefa salva:", novaTask);
         nav("/tasks");
       })
       .catch((error) => console.error("Erro ao salvar tarefa:", error));
