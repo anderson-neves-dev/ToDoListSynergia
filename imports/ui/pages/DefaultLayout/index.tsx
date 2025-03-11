@@ -22,12 +22,16 @@ import HouseSidingIcon from "@mui/icons-material/HouseSiding";
 import { Outlet, useNavigate } from "react-router";
 import { LogoSynergia } from "/client/assets/iconesSynergia/logoSynergia";
 import { LogoSynergiaPrincipal } from "/client/assets/iconesSynergia/logoSynergiaPrincipal";
-import { Button } from "@mui/material";
+import { Avatar, Button, Chip } from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
-
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import UploadProfilePicture from "/client/components/InputImagem";
+import { useTracker } from "meteor/react-meteor-data";
+import { MeteorUser } from "/client/interfaces/meteorUser";
 const navigation = [
   { text: "Home", href: "/", icon: HouseSidingIcon },
   { text: "Tasks", href: "/tasks", icon: AssignmentIcon },
+  { text: "Dados pessoais", href: "/usuario", icon: AccountCircleIcon },
 ];
 
 const drawerWidth = 240;
@@ -118,6 +122,9 @@ export default function MiniDrawer() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
+  const user = useTracker<MeteorUser | null>(() => Meteor.user());
+  console.log("Dados do usuário logado:", user);
+
   const nav = useNavigate();
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -139,33 +146,71 @@ export default function MiniDrawer() {
           fontWeight: "600",
         }}
       >
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={[
-              {
-                marginRight: 5,
-              },
-              open && { display: "none" },
-            ]}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
+        <Toolbar
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}
+        >
+          <Box sx={{ display: "flex", flexDirection: "row" }}>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              sx={[
+                {
+                  marginRight: 5,
+                },
+                open && { display: "none" },
+              ]}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography
+              variant="h6"
+              noWrap
+              component="div"
+              sx={{
+                fontFamily: "Saira, sans-serif",
+                fontWeight: "600",
+              }}
+            >
+              ToDo List 🚀
+            </Typography>
+          </Box>
+
+          <Chip
             sx={{
-              fontFamily: "Saira, sans-serif",
-              fontWeight: "600",
+              width: "auto",
+              padding: "20px",
+              flex: "row",
+              display: "flex",
+              gap: "10px",
+              fontSize: "20px",
+              color: "white",
             }}
-          >
-            ToDo List 🚀
-          </Typography>
-          ola
+            avatar={
+              user.profile?.profileImage ? (
+                <UploadProfilePicture
+                  disabled={true}
+                  initialImage={user.profile.profileImage}
+                  onImageChange={() => {}}
+                  width="30px"
+                  height="30px"
+                />
+              ) : (
+                <Avatar
+                  sx={{ width: "100%" }}
+                  alt="Natacha"
+                  src="/static/images/avatar/1.jpg"
+                />
+              )
+            }
+            label={user.username}
+            variant="outlined"
+          />
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
