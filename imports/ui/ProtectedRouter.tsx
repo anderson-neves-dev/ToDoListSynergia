@@ -12,15 +12,17 @@ export function ProtectedRoute({ isPrivate }: { isPrivate: boolean }) {
   });
 
   if (isLoading) {
-    // Enquanto o login está sendo processado, você pode exibir um loading ou retornar null
+    // Enquanto o login está sendo processado vai ser exibido um loading
     return <div>Carregando...</div>;
   }
 
   if (user && !isPrivate) {
+    // Redirecionamento para Usuario Logado
     return <Navigate to="/" replace />;
   }
 
   if (!user && isPrivate) {
+    // Redirecionamento para Usuario não Logado
     return <Navigate to="/login" replace />;
   }
 
