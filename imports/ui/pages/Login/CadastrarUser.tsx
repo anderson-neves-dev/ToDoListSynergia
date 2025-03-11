@@ -62,20 +62,25 @@ export function CadastrarUser() {
             label={"Usuário"}
             placeholder="Digite seu usuário"
             required
-            onChange={(e) => setUsername(e.target.value)}
+            value={username}
+            onChange={(e) => setUsername(e.target.value.replace(/\s/g, ""))}
           />
           <InputWithLabel
             placeholder={"***********"}
             label={"Senha"}
             type="password"
-            onChange={(e) => setPassword(e.target.value)}
             required
+            value={password}
+            onChange={(e) => setPassword(e.target.value.replace(/\s/g, ""))}
           />
           <InputWithLabel
             placeholder={"***********"}
             label={"Confirme a Senha"}
             type="password"
-            onChange={(e) => setConfirmPassword(e.target.value)}
+            value={confirmPassword}
+            onChange={(e) =>
+              setConfirmPassword(e.target.value.replace(/\s/g, ""))
+            }
             required
             errorMessage={error.message}
           />
