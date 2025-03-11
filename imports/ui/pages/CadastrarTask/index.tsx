@@ -34,6 +34,7 @@ const StyledDiv = styled.div`
 export default function CadastrarTask() {
   const user = useTracker(() => Meteor.user());
 
+  // State para tratar data e hora de forma separada
   const [agendadaPara, setAgendadaPara] = React.useState({
     date: "",
     time: "",
@@ -61,10 +62,10 @@ export default function CadastrarTask() {
       [name]: type === "checkbox" ? checked : value,
     }));
   };
-  const handleSave = async () => {
-    console.log(agendadaPara.date, agendadaPara.time);
 
-    // Converte corretamente para ISOString
+  // Função para cadastrar uma nova tarefa do servidor
+  const handleSave = async () => {
+    // Converte  para ISOString
     const agendadaParaISO =
       agendadaPara.date && agendadaPara.time
         ? new Date(
@@ -72,16 +73,12 @@ export default function CadastrarTask() {
           ).toISOString()
         : "";
 
-    // Criar a nova tarefa localmente
     const novaTask = {
       ...task,
       agendadaPara: agendadaParaISO,
     };
-
-    // Atualiza o estado (sem necessidade de await)
     setTask(novaTask);
 
-    // Chama o Meteor com a nova task
     await Meteor.callAsync("tasks.insert", novaTask)
       .then(() => {
         console.log("Tarefa salva:", novaTask);

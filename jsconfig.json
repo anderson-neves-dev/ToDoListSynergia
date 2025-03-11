@@ -57,6 +57,9 @@
       ],
       "meteor/tmeasday:publish-counts": [
         "/home/two/.meteor/packages/tmeasday_publish-counts/0.2.1/web.browser//packages/tmeasday:publish-counts.js"
+      ],
+      "meteor/email": [
+        "/home/two/.meteor/packages/email/3.1.2/web.browser/email.js"
       ]
     }
   },

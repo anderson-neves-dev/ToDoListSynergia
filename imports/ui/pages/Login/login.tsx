@@ -25,6 +25,7 @@ export function Login() {
   });
 
   const nav = useNavigate();
+
   const submit = (e: any) => {
     e.preventDefault();
     setError({ message: null });
@@ -33,6 +34,7 @@ export function Login() {
       if (error) {
         console.error(error);
         setError({ message: "Dados de login incorretos" });
+        alert("Dados de login incorretos");
       } else {
         console.log("Login bem-sucedido!");
       }
@@ -79,7 +81,9 @@ export function Login() {
           <StyleSpan onClick={() => nav("/cadastrar-usuario")}>
             Cadastrar
           </StyleSpan>
-          <StyleSpan>Esqueci minha Senha</StyleSpan>
+          {/* <StyleSpan onClick={() => nav("/resetar-senha")}>
+            Esqueci minha Senha
+          </StyleSpan> */}
         </StyledDivForm>
       </form>
     </div>

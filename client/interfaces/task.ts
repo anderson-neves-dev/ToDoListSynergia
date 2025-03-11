@@ -1,4 +1,4 @@
-type SituacaoType = "Cadastrada" | "Em Andamento" | "Concluída";
+type SituacaoType = "Cadastrada" | "Em Andamento" | "Finalizada";
 
 export interface TaskInterface {
   _id?: string;

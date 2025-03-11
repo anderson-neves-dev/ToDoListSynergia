@@ -27,7 +27,7 @@ Meteor.startup(async () => {
         descricao: "Lavar todas as vasilhas sujas que estão na pia.",
         criadaEm: new Date("2025-02-19T10:00:00"),
         agendadaPara: new Date("2025-02-20T18:00:00"),
-        situacao: "Cadastrada" as "Cadastrada", // Asserção de tipo literal
+        situacao: "Cadastrada" as "Cadastrada",
         byUserId: user?._id,
         privada: true,
         usuarioNome: user?.username,
@@ -49,7 +49,7 @@ Meteor.startup(async () => {
           "Discutir os próximos passos e ajustes solicitados pelo cliente.",
         criadaEm: new Date("2025-02-17T09:00:00"),
         agendadaPara: new Date("2025-02-22T15:00:00"),
-        situacao: "Concluída" as "Concluída",
+        situacao: "Finalizada" as "Finalizada",
         byUserId: user?._id,
         privada: true,
         usuarioNome: user?.username,
